@@ -1,1 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <title>Happy Birthday Card</title>
+
+    <!-- Bootstrap 5 -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+
+    <style>
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #ff758c, #ff7eb3);
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
+
+        /* Input Box */
+        .input-box {
+            width: 420px;
+            background: white;
+            padding: 30px;
+            border-radius: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+        }
+
+        /* Birthday Card */
+        .birthday-card {
+            display: none;
+            width: 430px;
+            background: white;
+            padding: 30px;
+            text-align: center;
+            border-radius: 30px;
+            box-shadow: 0 10px 35px rgba(0,0,0,0.3);
+            animation: appear 1s ease;
+        }
+
+        @keyframes appear {
+            from {
+                transform: scale(0);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* Person Photo */
+        #personPhoto {
+            width: 170px;
+            height: 170px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 6px solid #ff4081;
+            margin-bottom: 15px;
+        }
+
+        .cake {
+            font-size: 65px;
+            animation: bounce 1.2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-12px);
+            }
+        }
+
+        .birthday-title {
+            color: #ff4081;
+            font-size: 42px;
+            font-weight: bold;
+        }
+
+        .person-name {
+            color: #6f42c1;
+            font-weight: bold;
+        }
+
+        .age {
+            font-size: 22px;
+            color: #e91e63;
+            font-weight: bold;
+        }
+
+        /* Balloons */
+        .balloon {
+            position: absolute;
+            font-size: 55px;
+            animation: fly 6s linear infinite;
+        }
+
+        .balloon1 {
+            left: 5%;
+            bottom: -100px;
+        }
+
+        .balloon2 {
+            right: 5%;
+            bottom: -100px;
+            animation-delay: 2s;
+        }
+
+        @keyframes fly {
+            from {
+                bottom: -100px;
+            }
+
+            to {
+                bottom: 110%;
+            }
+        }
+
+        /* Card Fly Animation */
+        .fly-away {
+            animation: cardFly 3s forwards;
+        }
+
+        @keyframes cardFly {
+            0% {
+                transform: translateY(0) rotate(0);
+                opacity: 1;
+            }
+
+            50% {
+                transform: translateY(-300px) rotate(10deg);
+                opacity: 0.8;
+            }
+
+            100% {
+                transform: translateY(-1000px) rotate(25deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Balloons -->
+    <div class="balloon balloon1">🎈</div>
+    <div class="balloon balloon2">🎈</div>
+
+
+    <!-- ================= INPUT FORM ================= -->
+
+    <div class="input-box" id="inputBox">
+
+        <h2 class="text-center text-danger mb-4">
+            🎂 Birthday Card
+        </h2>
+
+        <!-- Name -->
+        <div class="mb-3">
+            <label class="form-label">
+                Enter Name
+            </label>
+
+            <input
+                type="text"
+                id="name"
+                class="form-control"
+                placeholder="Enter birthday person's name">
+        </div>
+
+
+        <!-- Date of Birth -->
+        <div class="mb-3">
+
+            <label class="form-label">
+                Date of Birth
+            </label>
+
+            <input
+                type="date"
+                id="dob"
+                class="form-control">
+
+        </div>
+
+
+        <!-- Photo -->
+        <div class="mb-3">
+
+            <label class="form-label">
+                Select Photo
+            </label>
+
+            <input
+                type="file"
+                id="photo"
+                class="form-control"
+                accept="image/*">
+
+        </div>
+
+
+        <!-- Button -->
+        <button
+            class="btn btn-danger w-100"
+            onclick="createCard()">
+
+            🎁 Create Birthday Card
+
+        </button>
+
+    </div>
+
+
+    <!-- ================= BIRTHDAY CARD ================= -->
+
+    <div class="birthday-card" id="birthdayCard">
+
+        <div class="cake">
+            🎂
+        </div>
+
+        <!-- Photo -->
+        <img
+            id="personPhoto"
+            src=""
+            alt="Birthday Person">
+
+
+        <!-- Happy Birthday -->
+        <div class="birthday-title">
+            Happy Birthday!
+        </div>
+
+
+        <!-- Name -->
+        <h2
+            class="person-name"
+            id="personName">
+        </h2>
+
+
+        <!-- Age -->
+        <p
+            class="age"
+            id="personAge">
+        </p>
+
+
+        <p class="text-muted">
+            🎉 Wishing you lots of happiness,
+            success, love and beautiful moments! 🎉
+        </p>
+
+
+        <!-- Celebrate -->
+        <button
+            class="btn btn-primary px-4"
+            onclick="flyCard()">
+
+            🚀 Celebrate
+
+        </button>
+
+    </div>
+
+
+    <!-- ================= JAVASCRIPT ================= -->
+
+    <script>
+
+        function createCard() {
+
+            // Get input values
+            let name =
+                document.getElementById("name").value;
+
+            let dob =
+                document.getElementById("dob").value;
+
+            let photo =
+                document.getElementById("photo").files[0];
+
+
+            // Check input
+            if (name === "" || dob === "" || !photo) {
+
+                alert(
+                    "Please enter Name, Date of Birth and Photo!"
+                );
+
+                return;
+            }
+
+
+            // ================= AGE CALCULATION =================
+
+            let birthDate = new Date(dob);
+
+            let today = new Date();
+
+            let age =
+                today.getFullYear()
+                - birthDate.getFullYear();
+
+            let month =
+                today.getMonth()
+                - birthDate.getMonth();
+
+
+            if (
+                month < 0 ||
+                (
+                    month === 0 &&
+                    today.getDate() < birthDate.getDate()
+                )
+            ) {
+
+                age--;
+
+            }
+
+
+            // ================= SHOW NAME =================
+
+            document.getElementById("personName").innerHTML =
+                "🎉 " + name + " 🎉";
+
+
+            // ================= SHOW AGE =================
+
+            document.getElementById("personAge").innerHTML =
+                "You are " + age + " years old!";
+
+
+            // ================= SHOW PHOTO =================
+
+            let reader = new FileReader();
+
+            reader.onload = function(event) {
+
+                document.getElementById("personPhoto").src =
+                    event.target.result;
+
+            };
+
+            reader.readAsDataURL(photo);
+
+
+            // Hide input form
+            document.getElementById("inputBox").style.display =
+                "none";
+
+
+            // Show Birthday Card
+            document.getElementById("birthdayCard").style.display =
+                "block";
+
+        }
+
+
+        // ================= FLY CARD =================
+
+        function flyCard() {
+
+            document
+                .getElementById("birthdayCard")
+                .classList.add("fly-away");
+
+        }
+
+    </script>
+
+</body>
+</html>
